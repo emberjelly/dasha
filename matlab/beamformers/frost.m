@@ -4,7 +4,7 @@ array = phased.ULA('NumElements',n_elements,'ElementSpacing',0.0425);
 array.Element.FrequencyRange = [20 20000];
 fs = 8e3;
 t = 0:1/fs:1;
-x = chirp(t,0,1,2000);
+x = chirp(t,0,1,1000);
 c = 340;
 collector = phased.WidebandCollector('Sensor',array,...
     'PropagationSpeed',c,'SampleRate',fs,...
@@ -18,6 +18,8 @@ beamformer = phased.FrostBeamformer('SensorArray',array,...
     'PropagationSpeed',c,'SampleRate',fs,...
     'Direction',incidentAngle,'FilterLength',10, 'WeightsOutputPort', true);
 [y, w] = beamformer(rx);
+
+freqz(w, 1)
 
 sum(x(:,n_elements/2).^2)/(sum((rx(:,n_elements/2) - x(:,n_elements/2)).^2))
 sum(x(:,n_elements/2).^2)/(sum((y - x(:,n_elements/2)).^2))
